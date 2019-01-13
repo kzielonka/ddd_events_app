@@ -1,0 +1,21 @@
+= form_for @event, url: events_path do |f|
+  %div
+    = f.label :title
+    = f.text_field :title
+    %ul
+      - @event.errors[:title].each do |error|
+        %li= error
+  %div
+    = f.label :description
+    = f.text_field :description
+    %ul
+      - @event.errors[:description].each do |error|
+        %li= error
+  %div
+    = f.label :number_of_tickets
+    = f.number_field :number_of_tickets
+    %ul
+      - @event.errors[:number_of_tickets].each do |error|
+        %li= error
+  %div
+    = f.submit
