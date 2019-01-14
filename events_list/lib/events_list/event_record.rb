@@ -3,6 +3,8 @@ class EventsList
     self.table_name  = 'events_list_events'
     self.primary_key = 'id'
 
+    scope :published, -> { where(published: true) }
+
     def self.create(id)
       super(id: id)
     rescue ActiveRecord::RecordNotUnique

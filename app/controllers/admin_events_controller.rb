@@ -38,7 +38,7 @@ class AdminEventsController < ApplicationController
       ))
     end
 
-    redirect_to events_path
+    redirect_to admin_events_path
   rescue Events::Errors::InvalidEventDetails => error
     @event.add_errors(error)
     render action: :edit

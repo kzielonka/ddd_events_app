@@ -11,6 +11,10 @@ class EventsList
     EventRecord.all.map(&:to_event)
   end
 
+  def published_events
+    EventRecord.published.map(&:to_event)
+  end
+
   def find(id)
     EventRecord.find(id).to_event
   end

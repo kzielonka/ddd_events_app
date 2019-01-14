@@ -1,24 +1,28 @@
 = form_for @event, url: url, method: method do |f|
-  %div
+  .form-group
     = f.label :title
-    = f.text_field :title
-    %ul
-      - @event.errors[:title].each do |error|
-        %li= error
-  %div
+    = f.text_field :title, class: @event.errors[:title].empty? ? 'form-control' : 'form-control is-invalid'
+    .invalid-feedback
+      %ul
+        - @event.errors[:title].each do |error|
+          %li= error
+  .form-group
     = f.label :description
-    = f.text_field :description
-    %ul
-      - @event.errors[:description].each do |error|
-        %li= error
-  %div
+    = f.text_area :description, class: @event.errors[:description].empty? ? 'form-control' : 'form-control is-invalid'
+    .invalid-feedback
+      %ul
+        - @event.errors[:description].each do |error|
+          %li= error
+  .form-group
     = f.label :number_of_tickets
-    = f.number_field :number_of_tickets
-    %ul
-      - @event.errors[:number_of_tickets].each do |error|
-        %li= error
-  %div
-    = f.submit value: "Update" do
-      = submit_button
-    = f.submit value: "publish" do
-      Publish
+    = f.number_field :number_of_tickets, class: @event.errors[:number_of_tickets].empty? ? 'form-control' : 'form-control is-invalid'
+    .invalid-feedback
+      %ul
+        - @event.errors[:number_of_tickets].each do |error|
+          %li= error
+  .form-group
+    .clearfix
+      = f.submit value: "Update", class: 'btn btn-primary float-right ml-3' do
+        = submit_button
+      = f.submit value: "publish", class: 'btn btn-warning float-right' do
+        Publish

@@ -32,7 +32,7 @@ class Events
       def update_number_of_tickets(command, event, errors)
         event.update_number_of_tickets(command.number_of_tickets)
       rescue Event::ValidationError => error
-        errors.add(:number_of_tickets_errors, error.validation_errors)
+        errors.add(:number_of_tickets, error.validation_errors)
       end
 
       class ErrorsContainer
