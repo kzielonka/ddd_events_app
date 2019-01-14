@@ -28,14 +28,15 @@ describe "creating event" do
         event_id:    event_id,
         title:       "Title",
         description: "Description",
-        number_of_tickets: 5,
+        total_places: 5,
       ),
     )
     expect(event_store).to have_events(
       Events::DomainEvents::EventCreated.new(data: { id: event_id }),
       Events::DomainEvents::EventTitleUpdated.new(data: { id: event_id, title: "Title" }),
       Events::DomainEvents::EventDescriptionUpdated.new(data: { id: event_id, description: "Description" }),
-      Events::DomainEvents::EventNumberOfTicketsUpdated.new(data: { id: event_id, number_of_tickets: 5 }),
+      Events::DomainEvents::EventTotalPlacesUpdated.new(data: { id: event_id, total_places: 5 }),
+      Events::DomainEvents::EventFreePlacesChanged.new(data: { id: event_id, free_places: 5 }),
     )
   end
 
@@ -46,14 +47,15 @@ describe "creating event" do
         event_id:          event_id,
         title:             "Title",
         description:       "Description",
-        number_of_tickets: 10,
+        total_places: 10,
       ),
     )
     expect(event_store).to have_events(
       Events::DomainEvents::EventCreated.new(data: { id: event_id }),
       Events::DomainEvents::EventTitleUpdated.new(data: { id: event_id, title: "Title" }),
       Events::DomainEvents::EventDescriptionUpdated.new(data: { id: event_id, description: "Description" }),
-      Events::DomainEvents::EventNumberOfTicketsUpdated.new(data: { id: event_id, number_of_tickets: 10 }),
+      Events::DomainEvents::EventTotalPlacesUpdated.new(data: { id: event_id, total_places: 10 }),
+      Events::DomainEvents::EventFreePlacesChanged.new(data: { id: event_id, free_places: 10 }),
     )
   end
 
@@ -64,7 +66,7 @@ describe "creating event" do
           event_id:    event_id,
           title:       "Title",
           description: "Description",
-          number_of_tickets: 5,
+          total_places: 5,
         ),
       )
     end.to raise_exception(Events::Errors::EventNotFound)
@@ -78,7 +80,7 @@ describe "creating event" do
           event_id:    event_id,
           title:       "x" * 101,
           description: "Description",
-          number_of_tickets: 5,
+          total_places: 5,
         ),
       )
     end.to raise_exception(Events::Errors::InvalidEventDetails)
@@ -91,7 +93,7 @@ describe "creating event" do
         event_id:    event_id,
         title:       "Title",
         description: "Description",
-        number_of_tickets: 5,
+        total_places: 5,
       ),
     )
     subject.execute_command(Events::Commands::PublishEvent.new(event_id: event_id))
@@ -101,7 +103,7 @@ describe "creating event" do
           event_id:    event_id,
           title:       "Title",
           description: "Description",
-          number_of_tickets: 5,
+          total_places: 5,
         ),
       )
     end.to raise_exception(Events::Errors::PublishedEventCantBeUpdated)
@@ -114,7 +116,7 @@ describe "creating event" do
         Events::Commands::UpdateEventDetails.new(
           event_id:          event_id,
           title:             "Title",
-          number_of_tickets: -2,
+          total_places: -2,
           description:       "Description",
         ),
       )
@@ -128,7 +130,7 @@ describe "creating event" do
         Events::Commands::UpdateEventDetails.new(
           event_id:          event_id,
           title:             "Title",
-          number_of_tickets: 1_000_001,
+          total_places: 1_000_001,
           description:       "Description",
         ),
       )
@@ -142,7 +144,7 @@ describe "creating event" do
         event_id:    event_id,
         title:       "Title",
         description: "Description",
-        number_of_tickets: 10,
+        total_places: 10,
       ),
     )
     subject.execute_command(Events::Commands::PublishEvent.new(event_id: event_id))
@@ -150,7 +152,8 @@ describe "creating event" do
       Events::DomainEvents::EventCreated.new(data: { id: event_id }),
       Events::DomainEvents::EventTitleUpdated.new(data: { id: event_id, title: "Title" }),
       Events::DomainEvents::EventDescriptionUpdated.new(data: { id: event_id, description: "Description" }),
-      Events::DomainEvents::EventNumberOfTicketsUpdated.new(data: { id: event_id, number_of_tickets: 10 }),
+      Events::DomainEvents::EventTotalPlacesUpdated.new(data: { id: event_id, total_places: 10 }),
+      Events::DomainEvents::EventFreePlacesChanged.new(data: { id: event_id, free_places: 10 }),
       Events::DomainEvents::EventPublished.new(data: { id: event_id }),
     )
   end
@@ -162,7 +165,7 @@ describe "creating event" do
         event_id:    event_id,
         title:       "",
         description: "Description",
-        number_of_tickets: 10,
+        total_places: 10,
       ),
     )
     expect do
@@ -177,7 +180,7 @@ describe "creating event" do
         event_id:    event_id,
         title:       "Title",
         description: "",
-        number_of_tickets: 10,
+        total_places: 10,
       ),
     )
     expect do

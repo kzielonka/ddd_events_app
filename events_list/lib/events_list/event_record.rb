@@ -14,7 +14,7 @@ class EventsList
     end
 
     def to_event
-      Event.new(id, title, description, total_number_of_tickets, published)
+      Event.new(id, title, description, total_places, free_places, published)
     end
   end
   private_constant :EventRecord

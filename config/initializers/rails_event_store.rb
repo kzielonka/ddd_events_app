@@ -19,7 +19,8 @@ Rails.configuration.to_prepare do
       to: [
         Events::DomainEvents::EventTitleUpdated,
         Events::DomainEvents::EventDescriptionUpdated,
-        Events::DomainEvents::EventNumberOfTicketsUpdated,
+        Events::DomainEvents::EventTotalPlacesUpdated,
+        Events::DomainEvents::EventFreePlacesChanged,
         Events::DomainEvents::EventPublished,
       ],
     )

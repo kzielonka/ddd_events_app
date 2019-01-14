@@ -7,6 +7,8 @@ class Events
     EventUnpublished = Class.new(RailsEventStore::Event)
     EventTitleUpdated = Class.new(RailsEventStore::Event)
     EventDescriptionUpdated = Class.new(RailsEventStore::Event)
-    EventNumberOfTicketsUpdated = Class.new(RailsEventStore::Event)
+    EventTotalPlacesUpdated = Class.new(RailsEventStore::Event)
+    TicketSold = Class.new(RailsEventStore::Event)
+    EventFreePlacesChanged = Class.new(RailsEventStore::Event)
   end
 end

@@ -15,20 +15,47 @@ class Events
       alias validation_errors errors
     end
 
-    def initialize(id)
+    def initialize(id, uuid_generator = proc { 'uuid' })
       @id = ValueObjects::EventId.new(id)
+      @uuid_generator = uuid_generator
 
       @created = false
       @published = false
 
       @title = ValueObjects::Title.new(:not_set)
       @description = ValueObjects::Title.new(:not_set)
-      @number_of_tickets = ValueObjects::NumberOfTickets.new(:not_set)
+      @total_places = ValueObjects::TotalPlaces.new(:not_set)
+      @sold_places = ValueObjects::Places.new(0)
     end
 
     def create
       raise Errors::EventAlreadyCreated if @created
       apply DomainEvents::EventCreated.new(data: { id: @id.to_s })
+    end
+
+    def buy_ticket(places)
+      places = Integer(places)
+
+      raise Errors::EventNotFound unless @created
+      raise Errors::EventIsNotPublic unless @published
+
+      free_places = @total_places.to_i - @sold_places.to_i
+      raise Errors::NotEnoughTickets if free_places < places
+
+      apply DomainEvents::TicketSold.new(
+        data: {
+          event_id: @id.to_s,
+          transaction_id: @uuid_generator.call,
+          places: places,
+        }
+      )
+
+      apply DomainEvents::EventFreePlacesChanged.new(
+        data: {
+          id: @id.to_s,
+          free_places: free_places - places
+        }
+      )
     end
 
     def update_title(title)
@@ -61,17 +88,25 @@ class Events
       )
     end
 
-    def update_number_of_tickets(num)
+    def update_total_places(num)
       raise Errors::EventNotFound unless @created
       raise Errors::PublishedEventCantBeUpdated if @published
 
-      num = ValueObjects::NumberOfTickets.new(num)
+      num = ValueObjects::TotalPlaces.new(num)
       raise ValidationError, num.validate unless num.valid?
 
-      apply DomainEvents::EventNumberOfTicketsUpdated.new(
+      apply DomainEvents::EventTotalPlacesUpdated.new(
         data: {
           id: @id.to_s,
-          number_of_tickets: num.to_i
+          total_places: num.to_i
+        }
+      )
+
+      free_places = @total_places.to_i - @sold_places.to_i
+      apply DomainEvents::EventFreePlacesChanged.new(
+        data: {
+          id: @id.to_s,
+          free_places: free_places,
         }
       )
     end
@@ -80,7 +115,7 @@ class Events
       errors = {
         title: @title.validate(false),
         description: @description.validate(false),
-        number_of_tickets: @number_of_tickets.validate,
+        total_places: @total_places.validate,
       }
       raise ValidationError, errors unless errors.values.all?(&:empty?)
       apply DomainEvents::EventPublished.new(data: { id: @id.to_s })#, published_at: Time.now.utc })
@@ -119,8 +154,16 @@ class Events
       @description = ValueObjects::Description.new(event.data[:description])
     end
 
-    on(DomainEvents::EventNumberOfTicketsUpdated) do |event|
-      @number_of_tickets = ValueObjects::NumberOfTickets.new(event.data[:number_of_tickets])
+    on(DomainEvents::EventTotalPlacesUpdated) do |event|
+      @total_places = ValueObjects::TotalPlaces.new(event.data[:total_places])
+    end
+
+    on(DomainEvents::TicketSold) do |event|
+      @sold_places = ValueObjects::Places.new(@sold_places.to_i + event.data[:places])
+    end
+
+    on(DomainEvents::EventFreePlacesChanged) do |_|
+      nil
     end
   end
   private_constant :Event

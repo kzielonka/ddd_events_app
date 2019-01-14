@@ -4,8 +4,9 @@ Dir[File.join(File.dirname(__FILE__), "command_handlers", "*.rb")].each { |f| re
 
 class Events
   class CommandHandlers
-    def initialize(event_store)
+    def initialize(event_store, uuid_generator)
       @event_store = event_store
+      @uuid_generator = uuid_generator
     end
 
     def handle(command)
@@ -15,7 +16,7 @@ class Events
     private
 
     def handlers
-      @handlers ||= self.class.handlers.map { |h| h.new(@event_store) }
+      @handlers ||= self.class.handlers.map { |h| h.new(@event_store, @uuid_generator) }
     end
 
     def self.handlers

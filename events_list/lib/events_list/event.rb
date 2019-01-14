@@ -1,5 +1,5 @@
 class EventsList
-  Event = Struct.new(:id, :title, :description, :total_number_of_tickets, :published) do
+  Event = Struct.new(:id, :title, :description, :total_places, :free_places, :published) do
     def published?
       published
     end

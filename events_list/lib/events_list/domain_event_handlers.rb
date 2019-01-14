@@ -20,11 +20,19 @@ class EventsList
       end
     end
 
-    class NumberOfTicketsUpdated
+    class TotalPlacesUpdated
       def handle(event)
-        return unless event.is_a?(Events::DomainEvents::EventNumberOfTicketsUpdated)
+        return unless event.is_a?(Events::DomainEvents::EventTotalPlacesUpdated)
         EventRecord.create(event.data[:id])
-        EventRecord.where(id: event.data[:id]).update_all(total_number_of_tickets: event.data[:number_of_tickets])
+        EventRecord.where(id: event.data[:id]).update_all(total_places: event.data[:total_places])
+      end
+    end
+
+    class FreePlacesChanged
+      def handle(event)
+        return unless event.is_a?(Events::DomainEvents::EventFreePlacesChanged)
+        EventRecord.create(event.data[:id])
+        EventRecord.where(id: event.data[:id]).update_all(free_places: event.data[:free_places])
       end
     end
 

@@ -9,7 +9,7 @@ class Events
 
           update_title(command, event, errors)
           update_description(command, event, errors)
-          update_number_of_tickets(command, event, errors)
+          update_total_places(command, event, errors)
 
           raise Errors::InvalidEventDetails, errors unless errors.empty?
         end
@@ -29,10 +29,10 @@ class Events
         errors.add(:description, error.validation_errors)
       end
 
-      def update_number_of_tickets(command, event, errors)
-        event.update_number_of_tickets(command.number_of_tickets)
+      def update_total_places(command, event, errors)
+        event.update_total_places(command.total_places)
       rescue Event::ValidationError => error
-        errors.add(:number_of_tickets, error.validation_errors)
+        errors.add(:total_places, error.validation_errors)
       end
 
       class ErrorsContainer
@@ -40,7 +40,7 @@ class Events
           @errors = {
             title: [].freeze,
             description: [].freeze,
-            number_of_tickets_errors: [].freeze,
+            total_places_errors: [].freeze,
           }
         end
 

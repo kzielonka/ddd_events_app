@@ -6,9 +6,11 @@ require "events/value_objects"
 require "events/event"
 require "events/command_handlers"
 
+require "securerandom"
+
 class Events
-  def initialize(event_store)
-    @command_handlers = CommandHandlers.new(event_store)
+  def initialize(event_store, uuid_generator = proc { SecureRandom.uuid })
+    @command_handlers = CommandHandlers.new(event_store, uuid_generator)
   end
 
   def execute_command(command)

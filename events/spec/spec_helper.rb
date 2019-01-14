@@ -43,4 +43,18 @@ RSpec::Matchers.define :have_events do |*expected|
   end
 end
 
+RSpec::Matchers.define :have_event do |expected|
+  match do |actual|
+    actual.all_events.any? do |ev|
+      ev.class == expected.class && ev.data == expected.data
+    end
+  end
 
+  failure_message do |_|
+    msg = "Expected event is:\n\n\n"
+    msg += "\t#{expected.class}\n\t#{expected.data}\n\n"
+    msg += "\nbut got:\n\n\n"
+    actual.all_events.each { |ev| msg += "\t#{ev.class}\n\t#{ev.data}\n\n" }
+    msg
+  end
+end

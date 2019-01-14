@@ -10,7 +10,7 @@
           %th
             Description
           %th
-            Total number of tickets
+            Total places
           %th
             Action
       %tbody
@@ -21,6 +21,6 @@
             %td
               = event.description
             %td
-              = event.total_number_of_tickets
+              = "#{event.free_places}/#{event.total_places}"
             %td
-              = link_to 'Buy', admin_event_path(event.id)
+              = link_to 'Buy', event_path(event.id)

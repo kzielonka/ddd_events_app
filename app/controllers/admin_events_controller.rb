@@ -17,7 +17,7 @@ class AdminEventsController < ApplicationController
       id: ev_data.id,
       title: ev_data.title,
       description: ev_data.description,
-      number_of_tickets: ev_data.total_number_of_tickets,
+      total_places: ev_data.total_places,
     )
   end
 
@@ -29,7 +29,7 @@ class AdminEventsController < ApplicationController
       event_id: @event.id,
       title: @event.title,
       description: @event.description,
-      number_of_tickets: @event.number_of_tickets.to_i,
+      total_places: @event.total_places.to_i,
     ))
 
     if params[:commit] == 'publish'
@@ -53,12 +53,12 @@ class AdminEventsController < ApplicationController
       event_id: event_id,
       title: @event.title,
       description: @event.description,
-      number_of_tickets: @event.number_of_tickets.to_i,
+      total_places: @event.total_places.to_i,
     ))
 
     if params[:commit] == 'publish'
       command_bus.(Events::Commands::PublishEvent.new(
-        event_id: @event.id,
+        event_id: event_id,
       ))
     end
 
@@ -72,18 +72,18 @@ class AdminEventsController < ApplicationController
 
   def event_attrs
     params.require(:admin_events_controller_event_form)
-          .permit(:title, :description, :number_of_tickets)
+          .permit(:title, :description, :total_places)
   end
 
   class EventForm
     include ActiveModel::Model
 
-    attr_accessor :id, :title, :description, :number_of_tickets
+    attr_accessor :id, :title, :description, :total_places
 
     def add_errors(validation_errors)
       validation_errors.title_errors.each { |e| errors.add(:title, e) }
       validation_errors.description_errors.each { |e| errors.add(:description, e) }
-      validation_errors.number_of_tickets_errors.each { |e| errors.add(:number_of_tickets, e) }
+      validation_errors.total_places_errors.each { |e| errors.add(:total_places, e) }
     end
   end
   private_constant :EventForm

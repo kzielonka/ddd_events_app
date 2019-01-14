@@ -23,11 +23,16 @@ class Events
       attribute :event_id, Types::UUID
       attribute :title, Types::String
       attribute :description, Types::String
-      attribute :number_of_tickets, Types::Integer
+      attribute :total_places, Types::Integer
     end
 
     class PublishEvent < Command
       attribute :event_id, Types::UUID
+    end
+
+    class BuyTicket < Command
+      attribute :event_id, Types::UUID
+      attribute :places, Types::Integer
     end
   end
 end

@@ -37,6 +37,14 @@ describe EventsList, clean_db: true do
         expect(subject.all_events.first.description).to eql('')
       end
 
+      it 'returns event with total places' do
+        expect(subject.all_events.first.total_places).to eql(0)
+      end
+
+      it 'returns event with free places' do
+        expect(subject.all_events.first.free_places).to eql(0)
+      end
+
       it 'returns not published event' do
         expect(subject.all_events.first.published?).to be(false)
       end
@@ -47,8 +55,9 @@ describe EventsList, clean_db: true do
     before :each do
       subject.handle_event(Events::DomainEvents::EventTitleUpdated.new(data: { id: event_id, title: 'Title' }))
       subject.handle_event(Events::DomainEvents::EventDescriptionUpdated.new(data: { id: event_id, description: 'Description' }))
-      subject.handle_event(Events::DomainEvents::EventNumberOfTicketsUpdated.new(data: { id: event_id, number_of_tickets: 5 }))
+      subject.handle_event(Events::DomainEvents::EventTotalPlacesUpdated.new(data: { id: event_id, total_places: 5 }))
       subject.handle_event(Events::DomainEvents::EventPublished.new(data: { id: event_id }))
+      subject.handle_event(Events::DomainEvents::EventFreePlacesChanged.new(data: { id: event_id, free_places: 2 }))
     end
 
     describe '#all_events' do
@@ -62,6 +71,14 @@ describe EventsList, clean_db: true do
 
       it 'returns event with blank description' do
         expect(subject.all_events.first.description).to eql('Description')
+      end
+
+      it 'returns event with free places' do
+        expect(subject.all_events.first.free_places).to eql(2)
+      end
+
+      it 'returns event with total places' do
+        expect(subject.all_events.first.total_places).to eql(5)
       end
 
       it 'returns not published event' do

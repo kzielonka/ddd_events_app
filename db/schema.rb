@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_14_001421) do
+ActiveRecord::Schema.define(version: 2019_01_14_234045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -39,8 +39,9 @@ ActiveRecord::Schema.define(version: 2019_01_14_001421) do
     t.uuid "id", null: false
     t.string "title", default: "", null: false
     t.string "description", default: "", null: false
-    t.integer "total_number_of_tickets", default: 0, null: false
+    t.integer "total_places", default: 0, null: false
     t.boolean "published", default: false, null: false
+    t.integer "free_places", default: 0, null: false
     t.index ["id"], name: "index_events_list_events_on_id", unique: true
     t.index ["published"], name: "index_events_list_events_on_published"
   end

@@ -14,11 +14,11 @@
         - @event.errors[:description].each do |error|
           %li= error
   .form-group
-    = f.label :number_of_tickets
-    = f.number_field :number_of_tickets, class: @event.errors[:number_of_tickets].empty? ? 'form-control' : 'form-control is-invalid'
+    = f.label :total_places
+    = f.number_field :total_places, class: @event.errors[:total_places].empty? ? 'form-control' : 'form-control is-invalid'
     .invalid-feedback
       %ul
-        - @event.errors[:number_of_tickets].each do |error|
+        - @event.errors[:total_places].each do |error|
           %li= error
   .form-group
     .clearfix
