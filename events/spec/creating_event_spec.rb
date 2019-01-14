@@ -1,21 +1,6 @@
 require "spec_helper"
 
 describe "creating event" do
-  matcher :have_events do |*expected|
-    match do |actual|
-      actual.all_events.collect(&:class) == expected.collect(&:class) &&
-        actual.all_events.collect(&:data) == expected.collect(&:data)
-    end
-
-    failure_message do |actual|
-      msg = "Expected events are:\n\n\n"
-      expected.each { |ev| msg += "\t#{ev.class}\n\t#{ev.data}\n\n" }
-      msg += "\nbut got:\n\n\n"
-      actual.all_events.each { |ev| msg += "\t#{ev.class}\n\t#{ev.data}\n\n" }
-      msg
-    end
-  end
-
   subject { Events.new(event_store) }
 
   let(:event_store) { EventStoreFake.new }

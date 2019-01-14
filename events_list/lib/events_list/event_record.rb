@@ -1,3 +1,5 @@
+require 'active_record'
+
 class EventsList
   class EventRecord < ActiveRecord::Base
     self.table_name  = 'events_list_events'

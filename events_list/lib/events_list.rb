@@ -1,3 +1,5 @@
+require 'events'
+
 require 'events_list/event'
 require 'events_list/event_record'
 require 'events_list/domain_event_handlers'
