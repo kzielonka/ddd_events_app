@@ -1,0 +1,31 @@
+%table
+  %thead
+    %tr
+      %th
+        Title
+      %th
+        Description
+      %th
+        Total number of tickets
+      %th
+        Published
+      %th
+        Action
+  %tbody
+    - @events.each do |event|
+      %tr
+        %td
+          = event.title
+        %td
+          = event.description
+        %td
+          = event.total_number_of_tickets
+        %td
+          = event.published? ? 'yes' : 'no'
+        %td
+          - if event.published?
+            = link_to 'Tickets', admin_event_path(event.id)
+          - else
+            = link_to 'Edit', edit_admin_event_path(event.id)
+%div
+  = link_to "New", new_admin_event_path

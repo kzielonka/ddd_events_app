@@ -10,9 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_12_191323) do
+ActiveRecord::Schema.define(version: 2019_01_14_001421) do
 
-  create_table "event_store_events", id: :string, limit: 36, force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
+  enable_extension "plpgsql"
+
+  create_table "event_store_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "event_type", null: false
     t.binary "metadata"
     t.binary "data", null: false
@@ -21,14 +25,24 @@ ActiveRecord::Schema.define(version: 2019_01_12_191323) do
     t.index ["event_type"], name: "index_event_store_events_on_event_type"
   end
 
-  create_table "event_store_events_in_streams", force: :cascade do |t|
+  create_table "event_store_events_in_streams", id: :serial, force: :cascade do |t|
     t.string "stream", null: false
     t.integer "position"
-    t.string "event_id", limit: 36, null: false
+    t.uuid "event_id", null: false
     t.datetime "created_at", null: false
     t.index ["created_at"], name: "index_event_store_events_in_streams_on_created_at"
     t.index ["stream", "event_id"], name: "index_event_store_events_in_streams_on_stream_and_event_id", unique: true
     t.index ["stream", "position"], name: "index_event_store_events_in_streams_on_stream_and_position", unique: true
+  end
+
+  create_table "events_list_events", id: false, force: :cascade do |t|
+    t.uuid "id", null: false
+    t.string "title", default: "", null: false
+    t.string "description", default: "", null: false
+    t.integer "total_number_of_tickets", default: 0, null: false
+    t.boolean "published", default: false, null: false
+    t.index ["id"], name: "index_events_list_events_on_id", unique: true
+    t.index ["published"], name: "index_events_list_events_on_published"
   end
 
 end

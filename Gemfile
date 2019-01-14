@@ -39,8 +39,11 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'rails_event_store', '~> 0.35.0'
 
 gem 'events', path: './events'
+gem 'events_list', path: './events_list'
 
 gem 'haml', '~> 5.0.4'
+
+gem 'pg', '~> 0.18.4'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

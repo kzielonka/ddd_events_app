@@ -3,7 +3,6 @@ Gem::Specification.new do |s|
   s.version     = "0.0.1"
   s.licenses    = []
   s.summary     = "Events"
-  s.description = "CultureSecrets premium ids management system"
   s.authors     = ["Krzysztof Zielonka"]
   s.files       = Dir.glob("lib/**/*")
 
