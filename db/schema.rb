@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_14_234045) do
+ActiveRecord::Schema.define(version: 2019_01_15_173623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -46,4 +46,21 @@ ActiveRecord::Schema.define(version: 2019_01_14_234045) do
     t.index ["published"], name: "index_events_list_events_on_published"
   end
 
+  create_table "tickets_list_events", id: false, force: :cascade do |t|
+    t.uuid "id", null: false
+    t.string "title", default: "", null: false
+    t.string "description", default: "", null: false
+    t.index ["id"], name: "index_tickets_list_events_on_id", unique: true
+  end
+
+  create_table "tickets_list_tickets", id: false, force: :cascade do |t|
+    t.uuid "id", null: false
+    t.uuid "event_id"
+    t.integer "places", default: 0, null: false
+    t.string "code", default: "", null: false
+    t.index ["event_id"], name: "index_tickets_list_tickets_on_event_id"
+    t.index ["id"], name: "index_tickets_list_tickets_on_id", unique: true
+  end
+
+  add_foreign_key "tickets_list_tickets", "tickets_list_events", column: "event_id"
 end

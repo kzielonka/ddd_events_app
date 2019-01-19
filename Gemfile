@@ -40,6 +40,7 @@ gem 'rails_event_store', '~> 0.35.0'
 
 gem 'events', path: './events'
 gem 'events_list', path: './events_list'
+gem 'tickets_list', path: './tickets_list'
 
 gem 'haml', '~> 5.0.4'
 

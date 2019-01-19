@@ -12,6 +12,12 @@ PATH
       dry-types (~> 0.13)
       rails_event_store (~> 0.35.0)
 
+PATH
+  remote: tickets_list
+  specs:
+    tickets_list (0.0.1)
+      events
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -310,6 +316,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   sqlite3
+  tickets_list!
   turbolinks (~> 5)
   tzinfo-data
   uglifier (>= 1.3.0)

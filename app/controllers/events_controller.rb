@@ -11,17 +11,22 @@ class EventsController < ApplicationController
   def buy
     @event = Rails.configuration.events_list.find(params[:id])
     @buy = BuyForm.new(buy_attrs)
+    ticket_id = SecureRandom.uuid
     command_bus.(Events::Commands::BuyTicket.new(
       event_id: params[:id],
+      ticket_id: ticket_id,
       places:   @buy.places,
     ))
-    redirect_to events_path
+    redirect_to ticket_path(ticket_id)
   rescue Events::Errors::EventNotFound
     render :not_found
   rescue Events::Errors::EventIsNotPublic
     render :not_found
   rescue Events::Errors::NotEnoughTickets
     @buy.errors[:places] << 'not enough places'
+    render :show
+  rescue Events::Errors::PlacesMustBeNonZeroPositive
+    @buy.errors[:places] << 'must be non zero positive'
     render :show
   end
 

@@ -1,0 +1,6 @@
+.row
+  .col-sm-12
+    %h1= @ticket.event.title
+    %p= @ticket.event.description
+    %p= "Places: #{@ticket.places}"
+    %p= "Code: #{@ticket.code}"

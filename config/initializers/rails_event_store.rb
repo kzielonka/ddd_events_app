@@ -11,7 +11,7 @@ Rails.configuration.to_prepare do
   Rails.configuration.events = Events.new(Rails.configuration.event_store)
 
   Rails.configuration.events_list = EventsList.new
-
+  Rails.configuration.tickets_list = TicketsList.new
 
   Rails.configuration.event_store.tap do |store|
     store.subscribe(
@@ -22,6 +22,15 @@ Rails.configuration.to_prepare do
         Events::DomainEvents::EventTotalPlacesUpdated,
         Events::DomainEvents::EventFreePlacesChanged,
         Events::DomainEvents::EventPublished,
+      ],
+    )
+
+    store.subscribe(
+      ->(ev) { Rails.configuration.tickets_list.handle_event(ev) },
+      to: [
+        Events::DomainEvents::EventTitleUpdated,
+        Events::DomainEvents::EventDescriptionUpdated,
+        Events::DomainEvents::TicketSold,
       ],
     )
   end

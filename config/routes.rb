@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :events, only: [:index, :show] do
     post :buy, to: 'events#buy', on: :member
   end
+  resources :tickets, only: :show
 
   root 'events#index'
 end

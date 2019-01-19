@@ -1,0 +1,21 @@
+.row
+  .col-sm-6.offset-sm-3
+    %h1
+      Buy
+      %b= @event.title
+    %p
+      Places:
+      = @event.total_places
+    = form_for @buy, url: buy_event_path(@event.id) do |f|
+      .form-group
+        = f.label :places
+        = f.number_field :places, class: @buy.errors[:places].empty? ? 'form-control' : 'form-control is-invalid'
+        .invalid-feedback
+          %ul
+            - @buy.errors[:places].each do |error|
+              %li= error
+
+      .form-group
+        .clearfix
+          = f.submit 'Buy', class: 'btn btn-primary float-right ml-3'
+          = link_to 'Go back', events_path, class: 'btn btn-link float-right'

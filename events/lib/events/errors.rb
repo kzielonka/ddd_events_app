@@ -5,6 +5,7 @@ class Events
     PublishedEventCantBeUpdated = Class.new(StandardError)
     EventIsNotPublic = Class.new(StandardError)
     NotEnoughTickets = Class.new(StandardError)
+    PlacesMustBeNonZeroPositive = Class.new(StandardError)
 
     class InvalidEventDetails < StandardError
       def initialize(errors)

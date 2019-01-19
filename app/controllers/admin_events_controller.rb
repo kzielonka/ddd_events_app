@@ -9,6 +9,7 @@ class AdminEventsController < ApplicationController
 
   def show
     @event = Rails.configuration.events_list.find(params[:id])
+    @tickets = Rails.configuration.tickets_list.find_for_event(params[:id])
   end
 
   def edit

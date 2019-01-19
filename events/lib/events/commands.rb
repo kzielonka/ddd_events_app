@@ -20,9 +20,9 @@ class Events
     end
 
     class UpdateEventDetails < Command
-      attribute :event_id, Types::UUID
-      attribute :title, Types::String
-      attribute :description, Types::String
+      attribute :event_id,     Types::UUID
+      attribute :title,        Types::String
+      attribute :description,  Types::String
       attribute :total_places, Types::Integer
     end
 
@@ -31,8 +31,9 @@ class Events
     end
 
     class BuyTicket < Command
-      attribute :event_id, Types::UUID
-      attribute :places, Types::Integer
+      attribute :event_id,  Types::UUID
+      attribute :ticket_id, Types::UUID
+      attribute :places,    Types::Integer
     end
   end
 end

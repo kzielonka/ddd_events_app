@@ -33,11 +33,12 @@ class Events
       apply DomainEvents::EventCreated.new(data: { id: @id.to_s })
     end
 
-    def buy_ticket(places)
+    def buy_ticket(ticket_id, places)
       places = Integer(places)
 
       raise Errors::EventNotFound unless @created
       raise Errors::EventIsNotPublic unless @published
+      raise Errors::PlacesMustBeNonZeroPositive unless places > 0
 
       free_places = @total_places.to_i - @sold_places.to_i
       raise Errors::NotEnoughTickets if free_places < places
@@ -45,7 +46,7 @@ class Events
       apply DomainEvents::TicketSold.new(
         data: {
           event_id: @id.to_s,
-          transaction_id: @uuid_generator.call,
+          ticket_id: ticket_id,
           places: places,
         }
       )

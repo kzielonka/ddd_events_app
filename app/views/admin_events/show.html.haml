@@ -5,4 +5,17 @@
   = @event.description
 %p
   Total places:
-  = @event.total_places
+  = "#{@event.free_places}/#{@event.total_places}"
+
+%table{ class: 'table table-hover' }
+  %thead{ class: 'thead-dark' }
+    %tr
+      %th Code
+      %th Places
+      %th Scaned at
+  %tbody
+    - @tickets.each do |ticket|
+      %tr
+        %td= ticket.code
+        %td= ticket.places
+        %td= 'xxxx'
