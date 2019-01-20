@@ -1,12 +1,15 @@
-require "aggregate_root"
+# frozen_string_literal: true
 
+require 'aggregate_root'
+
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/ClassLength
 class Events
   class Event
     include AggregateRoot
 
     class ValidationError < StandardError
       def initialize(errors)
-        super("validation error")
+        super('validation error')
         @errors = errors
       end
 
@@ -30,6 +33,7 @@ class Events
 
     def create
       raise Errors::EventAlreadyCreated if @created
+
       apply DomainEvents::EventCreated.new(data: { id: @id.to_s })
     end
 
@@ -38,7 +42,7 @@ class Events
 
       raise Errors::EventNotFound unless @created
       raise Errors::EventIsNotPublic unless @published
-      raise Errors::PlacesMustBeNonZeroPositive unless places > 0
+      raise Errors::PlacesMustBeNonZeroPositive unless places.positive?
 
       free_places = @total_places.to_i - @sold_places.to_i
       raise Errors::NotEnoughTickets if free_places < places
@@ -47,7 +51,7 @@ class Events
         data: {
           event_id: @id.to_s,
           ticket_id: ticket_id,
-          places: places,
+          places: places
         }
       )
 
@@ -69,7 +73,7 @@ class Events
       apply DomainEvents::EventTitleUpdated.new(
         data: {
           id: @id.to_s,
-          title: title.to_s,
+          title: title.to_s
         }
       )
     end
@@ -84,7 +88,7 @@ class Events
       apply DomainEvents::EventDescriptionUpdated.new(
         data: {
           id: @id.to_s,
-          description: description.to_s,
+          description: description.to_s
         }
       )
     end
@@ -107,7 +111,7 @@ class Events
       apply DomainEvents::EventFreePlacesChanged.new(
         data: {
           id: @id.to_s,
-          free_places: free_places,
+          free_places: free_places
         }
       )
     end
@@ -116,28 +120,12 @@ class Events
       errors = {
         title: @title.validate(false),
         description: @description.validate(false),
-        total_places: @total_places.validate,
+        total_places: @total_places.validate
       }
       raise ValidationError, errors unless errors.values.all?(&:empty?)
-      apply DomainEvents::EventPublished.new(data: { id: @id.to_s })#, published_at: Time.now.utc })
+
+      apply DomainEvents::EventPublished.new(data: { id: @id.to_s })
     end
-
-    class EventDetails
-      def initialize(data)
-        data = Hash(data)
-        @title = String(data[:title]).strip.freeze
-        @description = String(data[:description]).strip.freeze
-      end
-
-      def self.factory_empty
-        new({})
-      end
-
-      attr_reader :title
-      attr_reader :description
-    end
-
-    private
 
     on(DomainEvents::EventCreated) do |_|
       @created = true
@@ -169,3 +157,4 @@ class Events
   end
   private_constant :Event
 end
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/ClassLength

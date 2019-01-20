@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateEventsListEvents < ActiveRecord::Migration[5.2]
   def change
     create_table :events_list_events, id: false do |t|

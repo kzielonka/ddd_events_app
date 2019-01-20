@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Events
   module Errors
     EventAlreadyCreated = Class.new(StandardError)
@@ -9,7 +11,7 @@ class Events
 
     class InvalidEventDetails < StandardError
       def initialize(errors)
-        super("invalid event details")
+        super('invalid event details')
         @title_errors = errors.fetch(:title, [])
         @description_errors = errors.fetch(:description, [])
         @number_of_tickets_errors = errors.fetch(:number_of_tickets, [])

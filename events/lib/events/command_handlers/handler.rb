@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Events
   class CommandHandlers
     class Handler

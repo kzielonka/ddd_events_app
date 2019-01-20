@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TicketsController < ApplicationController
   def show
     @ticket = tickets_list.find(params[:id])

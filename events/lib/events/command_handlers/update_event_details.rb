@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Events
   class CommandHandlers
     class UpdateEventDetails < Handler
@@ -40,7 +42,7 @@ class Events
           @errors = {
             title: [].freeze,
             description: [].freeze,
-            total_places_errors: [].freeze,
+            total_places_errors: [].freeze
           }
         end
 

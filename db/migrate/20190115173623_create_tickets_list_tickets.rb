@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTicketsListTickets < ActiveRecord::Migration[5.2]
   def change
     create_table :tickets_list_tickets, id: false do |t|

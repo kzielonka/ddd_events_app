@@ -1,4 +1,6 @@
-require "rails_event_store"
+# frozen_string_literal: true
+
+require 'rails_event_store'
 
 class Events
   module DomainEvents

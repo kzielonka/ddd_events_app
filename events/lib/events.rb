@@ -1,12 +1,14 @@
-require "events/errors"
-require "events/types"
-require "events/commands"
-require "events/domain_events"
-require "events/value_objects"
-require "events/event"
-require "events/command_handlers"
+# frozen_string_literal: true
 
-require "securerandom"
+require 'events/errors'
+require 'events/types'
+require 'events/commands'
+require 'events/domain_events'
+require 'events/value_objects'
+require 'events/event'
+require 'events/command_handlers'
+
+require 'securerandom'
 
 class Events
   def initialize(event_store, uuid_generator = proc { SecureRandom.uuid })

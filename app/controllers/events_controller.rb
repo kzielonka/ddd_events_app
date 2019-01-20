@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EventsController < ApplicationController
   def index
     @events = Rails.configuration.events_list.published_events
@@ -12,11 +14,11 @@ class EventsController < ApplicationController
     @event = Rails.configuration.events_list.find(params[:id])
     @buy = BuyForm.new(buy_attrs)
     ticket_id = SecureRandom.uuid
-    command_bus.(Events::Commands::BuyTicket.new(
-      event_id: params[:id],
-      ticket_id: ticket_id,
-      places:   @buy.places,
-    ))
+    command_bus.call(Events::Commands::BuyTicket.new(
+                       event_id: params[:id],
+                       ticket_id: ticket_id,
+                       places: @buy.places
+                     ))
     redirect_to ticket_path(ticket_id)
   rescue Events::Errors::EventNotFound
     render :not_found

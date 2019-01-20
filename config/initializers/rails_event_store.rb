@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'rails_event_store'
 require 'arkency/command_bus'
 
 require 'events'
 require 'events_list'
 
-Rails.configuration.to_prepare do
+Rails.configuration.to_prepare do # rubocop:disable Metrics/BlockLength
   Rails.configuration.event_store = RailsEventStore::Client.new
   Rails.configuration.command_bus = Arkency::CommandBus.new
 
@@ -21,8 +23,8 @@ Rails.configuration.to_prepare do
         Events::DomainEvents::EventDescriptionUpdated,
         Events::DomainEvents::EventTotalPlacesUpdated,
         Events::DomainEvents::EventFreePlacesChanged,
-        Events::DomainEvents::EventPublished,
-      ],
+        Events::DomainEvents::EventPublished
+      ]
     )
 
     store.subscribe(
@@ -30,8 +32,8 @@ Rails.configuration.to_prepare do
       to: [
         Events::DomainEvents::EventTitleUpdated,
         Events::DomainEvents::EventDescriptionUpdated,
-        Events::DomainEvents::TicketSold,
-      ],
+        Events::DomainEvents::TicketSold
+      ]
     )
   end
 
@@ -39,7 +41,7 @@ Rails.configuration.to_prepare do
     Events::Commands.constants.each do |const|
       bus.register(
         Events::Commands.const_get(const),
-        ->(command) { Rails.configuration.events.execute_command(command) },
+        ->(command) { Rails.configuration.events.execute_command(command) }
       )
     end
   end

@@ -1,6 +1,8 @@
-require_relative "./command_handlers/handler"
+# frozen_string_literal: true
 
-Dir[File.join(File.dirname(__FILE__), "command_handlers", "*.rb")].each { |f| require f }
+require_relative './command_handlers/handler'
+
+Dir[File.join(File.dirname(__FILE__), 'command_handlers', '*.rb')].each { |f| require f }
 
 class Events
   class CommandHandlers
@@ -13,14 +15,14 @@ class Events
       handlers.each { |h| h.handle(command) }
     end
 
+    def self.handlers
+      constants.map(&method(:const_get))
+    end
+
     private
 
     def handlers
       @handlers ||= self.class.handlers.map { |h| h.new(@event_store, @uuid_generator) }
-    end
-
-    def self.handlers
-      constants.map(&method(:const_get))
     end
   end
   private_constant :CommandHandlers

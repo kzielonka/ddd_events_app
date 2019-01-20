@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminEventsController < ApplicationController
   def index
     @events = Rails.configuration.events_list.all_events
@@ -18,7 +20,7 @@ class AdminEventsController < ApplicationController
       id: ev_data.id,
       title: ev_data.title,
       description: ev_data.description,
-      total_places: ev_data.total_places,
+      total_places: ev_data.total_places
     )
   end
 
@@ -26,17 +28,17 @@ class AdminEventsController < ApplicationController
     @event = EventForm.new(event_attrs)
     @event.id = params[:id]
 
-    command_bus.(Events::Commands::UpdateEventDetails.new(
-      event_id: @event.id,
-      title: @event.title,
-      description: @event.description,
-      total_places: @event.total_places.to_i,
-    ))
+    command_bus.call(Events::Commands::UpdateEventDetails.new(
+                       event_id: @event.id,
+                       title: @event.title,
+                       description: @event.description,
+                       total_places: @event.total_places.to_i
+                     ))
 
     if params[:commit] == 'publish'
-      command_bus.(Events::Commands::PublishEvent.new(
-        event_id: @event.id,
-      ))
+      command_bus.call(Events::Commands::PublishEvent.new(
+                         event_id: @event.id
+                       ))
     end
 
     redirect_to admin_events_path
@@ -49,18 +51,18 @@ class AdminEventsController < ApplicationController
     @event = EventForm.new(event_attrs)
     event_id = SecureRandom.uuid
 
-    command_bus.(Events::Commands::CreateEvent.new(id: event_id))
-    command_bus.(Events::Commands::UpdateEventDetails.new(
-      event_id: event_id,
-      title: @event.title,
-      description: @event.description,
-      total_places: @event.total_places.to_i,
-    ))
+    command_bus.call(Events::Commands::CreateEvent.new(id: event_id))
+    command_bus.call(Events::Commands::UpdateEventDetails.new(
+                       event_id: event_id,
+                       title: @event.title,
+                       description: @event.description,
+                       total_places: @event.total_places.to_i
+                     ))
 
     if params[:commit] == 'publish'
-      command_bus.(Events::Commands::PublishEvent.new(
-        event_id: event_id,
-      ))
+      command_bus.call(Events::Commands::PublishEvent.new(
+                         event_id: event_id
+                       ))
     end
 
     redirect_to admin_events_path

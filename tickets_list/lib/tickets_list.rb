@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'events'
 
 require 'tickets_list/event_record'
@@ -16,7 +18,10 @@ class TicketsList
   end
 
   def find_for_event(event_id)
-    TicketRecord.where(event_id: String(event_id)).includes(:event).collect(&:to_ticket)
+    TicketRecord
+      .where(event_id: String(event_id))
+      .includes(:event)
+      .collect(&:to_ticket)
   end
 
   Ticket = Struct.new(:id, :code, :places, :event)

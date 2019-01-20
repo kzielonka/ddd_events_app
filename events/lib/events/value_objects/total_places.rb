@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 class Events
   module ValueObjects
     class TotalPlaces
       def initialize(num)
-        if num == :not_set
-          @num = :not_set
-        else
-          @num = Integer(num).dup.freeze
-        end
+        @num = if num == :not_set
+                 :not_set
+               else
+                 Integer(num).dup.freeze
+               end
       end
 
       def to_i
@@ -23,8 +25,8 @@ class Events
 
       def validate
         errors = []
-        errors << "can not be less than 0" if to_i < 0
-        errors << "can not be greater than 1000000" if to_i > 1000000
+        errors << 'can not be less than 0' if to_i.negative?
+        errors << 'can not be greater than 1000000' if to_i > 1_000_000
         errors
       end
     end

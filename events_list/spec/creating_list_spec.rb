@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe EventsList, clean_db: true do
   subject { described_class.new }
 
-  let(:event_id) { "c07a2487-a29f-46de-bbe1-f380cf96841a" }
+  let(:event_id) { 'c07a2487-a29f-46de-bbe1-f380cf96841a' }
 
   describe 'with no events' do
     describe '#all_events' do
@@ -21,7 +23,11 @@ describe EventsList, clean_db: true do
 
   describe 'with one not published event with only title' do
     before :each do
-      subject.handle_event(Events::DomainEvents::EventTitleUpdated.new(data: { id: event_id, title: 'Title' }))
+      subject.handle_event(
+        Events::DomainEvents::EventTitleUpdated.new(
+          data: { id: event_id, title: 'Title' }
+        )
+      )
     end
 
     describe '#all_events' do
@@ -53,11 +59,31 @@ describe EventsList, clean_db: true do
 
   describe 'with one published event with full data' do
     before :each do
-      subject.handle_event(Events::DomainEvents::EventTitleUpdated.new(data: { id: event_id, title: 'Title' }))
-      subject.handle_event(Events::DomainEvents::EventDescriptionUpdated.new(data: { id: event_id, description: 'Description' }))
-      subject.handle_event(Events::DomainEvents::EventTotalPlacesUpdated.new(data: { id: event_id, total_places: 5 }))
-      subject.handle_event(Events::DomainEvents::EventPublished.new(data: { id: event_id }))
-      subject.handle_event(Events::DomainEvents::EventFreePlacesChanged.new(data: { id: event_id, free_places: 2 }))
+      subject.handle_event(
+        Events::DomainEvents::EventTitleUpdated.new(
+          data: { id: event_id, title: 'Title' }
+        )
+      )
+      subject.handle_event(
+        Events::DomainEvents::EventDescriptionUpdated.new(
+          data: { id: event_id, description: 'Description' }
+        )
+      )
+      subject.handle_event(
+        Events::DomainEvents::EventTotalPlacesUpdated.new(
+          data: { id: event_id, total_places: 5 }
+        )
+      )
+      subject.handle_event(
+        Events::DomainEvents::EventPublished.new(
+          data: { id: event_id }
+        )
+      )
+      subject.handle_event(
+        Events::DomainEvents::EventFreePlacesChanged.new(
+          data: { id: event_id, free_places: 2 }
+        )
+      )
     end
 
     describe '#all_events' do

@@ -1,4 +1,6 @@
-require "dry-struct"
+# frozen_string_literal: true
+
+require 'dry-struct'
 
 class Events
   module Commands

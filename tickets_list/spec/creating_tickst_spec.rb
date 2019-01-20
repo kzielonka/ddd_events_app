@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe TicketsList, clean_db: true do
   subject { described_class.new }
 
-  let(:event_id) { "aaaaaaaa-a29f-46de-bbe1-f380cf96841a" }
-  let(:ticket_id) { "c07a2487-a29f-46de-bbe1-f380cf96841a" }
+  let(:event_id) { 'aaaaaaaa-a29f-46de-bbe1-f380cf96841a' }
+  let(:ticket_id) { 'c07a2487-a29f-46de-bbe1-f380cf96841a' }
 
   describe 'with no tickets' do
     describe '#find' do
@@ -22,7 +24,15 @@ describe TicketsList, clean_db: true do
 
   describe 'with one bought ticket' do
     before :each do
-      subject.handle_event(Events::DomainEvents::TicketSold.new(data: { event_id: event_id, ticket_id: ticket_id, places: 8 }))
+      subject.handle_event(
+        Events::DomainEvents::TicketSold.new(
+          data: {
+            event_id: event_id,
+            ticket_id: ticket_id,
+            places: 8
+          }
+        )
+      )
     end
 
     describe '#find' do
