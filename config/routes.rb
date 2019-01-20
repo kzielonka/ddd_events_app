@@ -8,5 +8,8 @@ Rails.application.routes.draw do
   end
   resources :tickets, only: :show
 
+  get 'tickets_scanner', to: 'tickets_scanner#show', as: :tickets_scanner
+  post 'tickets_scanner', to: 'tickets_scanner#scan', as: :scan_ticket
+
   root 'events#index'
 end

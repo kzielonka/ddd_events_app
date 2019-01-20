@@ -1,0 +1,24 @@
+.row
+  .col-sm-6.offset-sm-3
+    %h1 Tickets scanner
+    - if @show_valid_ticket_info
+      .alert.alert-success
+        Ticket is valid.
+    - if @show_valid_ticket_info
+      .alert.alert-danger
+        Ticket is invalid.
+    - if @show_valid_but_already_scanned_info
+      .alert.alert-warning
+        Ticket is valid but has already been scaned.
+    = form_for @scanner, url: scan_ticket_path do |f|
+      .form-group
+        = f.label :code
+        = f.text_field :code, class: @scanner.errors[:code].empty? ? 'form-control' : 'form-control is-invalid'
+        .invalid-feedback
+          %ul
+            - @scanner.errors[:code].each do |error|
+              %li= error
+      .form-group
+        .clearfix
+          = f.submit 'Scan', class: 'btn btn-primary float-right'
+
